@@ -2,11 +2,11 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: mini
-  region: ca-central-1
-  version: "1.20"
+  name: medium
+  region: us-east-1
+  version: "1.18"
   tags:
-    forgerock.io/cluster: "cdm-mini"
+    forgerock.io/cluster: "cdm-medium"
     # ES_USEREMAIL: ${ES_USEREMAIL}
     # ES_ZONE: ${ES_ZONE}
     # ES_BUSINESSUNIT: ${ES_BUSINESSUNIT}
@@ -18,16 +18,17 @@ vpc:
   clusterEndpoints:
     publicAccess:  true
     privateAccess: true
-    #cidr: 10.0.0.0/16
+    #cidr: 10.0.0.0/24
 
-availabilityZones: ["ca-central-1a","ca-central-1b","ca-central-1d"]
+availabilityZones: ["us-east-1a","us-east-1b","us-east-1c"]
 
 nodeGroups:
   - name: primary
     instanceType: t2.medium
+    ebsOptimized: true
     minSize: 1
-    maxSize: 1
-    desiredCapacity: 1
+    maxSize: 6
+    desiredCapacity: 6
     volumeSize: 80
     iam:
       withAddonPolicies:
@@ -36,10 +37,10 @@ nodeGroups:
     labels:
       frontend: "true"
       ds: "true"
-      forgerock.io/cluster: "cdm-mini"
+      forgerock.io/cluster: "cdm-medium"
       forgerock.io/role: "primary"
     tags:
-      forgerock.io/cluster: "cdm-mini"
+      forgerock.io/cluster: "cdm-medium"
       forgerock.io/role: "primary"
       # ES_USEREMAIL: ${ES_USEREMAIL}
       # ES_ZONE: ${ES_ZONE}
@@ -52,3 +53,23 @@ nodeGroups:
       # eksctl will use your default public key (e.a. $HOME/.ssh/id_rsa.pub) if no path is provided
       # publicKeyPath:
       allow: true
+  # - name: ds
+  #   instanceType: t2.medium
+  #   minSize: 6
+  #   maxSize: 6
+  #   desiredCapacity: 6
+  #   volumeSize: 80
+  #   labels:
+  #     ds: "true"
+  #     forgerock.io/cluster: "cdm-medium"
+  #     forgerock.io/role: "ds"
+  #   tags:
+  #     forgerock.io/cluster: "cdm-medium"
+  #     forgerock.io/role: "ds"
+  #   taints:
+  #     WorkerDedicatedDS: true:NoSchedule
+  #   privateNetworking: true
+  #   ssh:
+  #     # eksctl will use your default public key (e.a. $HOME/.ssh/id_rsa.pub) if no path is provided
+  #     # publicKeyPath:
+  #     allow: true
