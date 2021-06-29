@@ -28,7 +28,7 @@ nodeGroups:
     minSize: 1
     maxSize: 6
     desiredCapacity: 6
-    volumeSize: 80
+    volumeSize: 30
     iam:
       withAddonPolicies:
         autoScaler: true
